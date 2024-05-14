@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -75,9 +75,14 @@ namespace alfa
                         JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(content);
 
                         // Проверяем, что jsonResponse не равен null
+
+
+
+
+
                         if (jsonResponse != null)
                         {
-                            organization.Dubl = "Нет";
+                            organization.Dubl = "Да";
                             // Выводим содержимое JSON-ответа
                             Console.WriteLine(jsonResponse.ToString());
                         }
@@ -102,8 +107,7 @@ namespace alfa
                     Console.WriteLine("Ошибка");
                 }
             }
-        
-    }
+        }
     }
 }
 
