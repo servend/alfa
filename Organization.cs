@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 ﻿using System;
+=======
+﻿
+
+using System;
+>>>>>>> Добавьте файлы проекта.
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

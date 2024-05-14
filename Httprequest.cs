@@ -100,11 +100,9 @@ namespace alfa
                         Console.WriteLine("Ошибка: " + response.StatusCode); organization.Dubl = "Да";
                     }
                 }
-                catch (Exception
-                
-                )
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Ошибка");
+                    Console.WriteLine("Ошибка " + ex);
                 }
             }
         }
