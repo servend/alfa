@@ -50,22 +50,22 @@ namespace alfa
                     {
                         Content = new StringContent(json, Encoding.UTF8, "application/json")
                     };
+                    
+                        // Отправляем HTTP-запрос и получаем ответ
+                        HttpResponseMessage response = await client.SendAsync(request);
+                        Console.WriteLine($"{request.Method} {request.RequestUri}");
 
-                    // Отправляем HTTP-запрос и получаем ответ
-                    HttpResponseMessage response = await client.SendAsync(request);
-                    Console.WriteLine($"{request.Method} {request.RequestUri}");
+                        // Выводим заголовки запроса
+                        Console.WriteLine("Headers:");
+                        foreach (var header in request.Headers)
+                        {
+                            Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+                        }
 
-                    // Выводим заголовки запроса
-                    Console.WriteLine("Headers:");
-                    foreach (var header in request.Headers)
-                    {
-                        Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
-                    }
-
-                    // Выводим содержимое тела запроса (JSON)
-                    Console.WriteLine("Body:");
-                    Console.WriteLine(json);
-
+                        // Выводим содержимое тела запроса (JSON)
+                        Console.WriteLine("Body:");
+                        Console.WriteLine(json);
+                    
                     if (response.IsSuccessStatusCode)
                     {
                         // Получаем содержимое ответа

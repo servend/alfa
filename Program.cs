@@ -20,7 +20,7 @@ class Program
         for (int i = 0; i < 5; i++)
         {
             int startIndex = i * chunkSize;
-            int count = (i < 4) ? chunkSize : chunkSize + remainder;
+            int count = (i <= 4) ? chunkSize : chunkSize + remainder;
 
             // Создаем отдельную задачу для каждого потока
             tasks.Add(Task.Run(() => Httprequest.Request(organizations.GetRange(startIndex, count))
