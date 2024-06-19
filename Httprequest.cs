@@ -53,6 +53,9 @@ namespace alfa
                     
                         // Отправляем HTTP-запрос и получаем ответ
                         HttpResponseMessage response = await client.SendAsync(request);
+
+
+
                         Console.WriteLine($"{request.Method} {request.RequestUri}");
 
                         // Выводим заголовки запроса
