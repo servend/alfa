@@ -17,7 +17,8 @@ class Program
         int chunkSize = organizations.Count / 5;
         int remainder = organizations.Count % 5;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5
+            ; i++)
         {
             int startIndex = i * chunkSize;
             int count = (i <= 4) ? chunkSize : chunkSize + remainder;
