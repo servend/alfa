@@ -88,7 +88,7 @@ namespace alfa
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
                 foreach(Organization organization in organizations)
                 {
-                    worksheet.Cells["A2"].LoadFromCollection(organizations.Select(obj => new { ((dynamic)obj).Name, ((dynamic)obj).Number, ((dynamic)obj).INN }), true);
+                    worksheet.Cells["A1"].LoadFromCollection(organizations.Select(obj => new { ((dynamic)obj).Name, ((dynamic)obj).Number, ((dynamic)obj).INN }), true);
                     worksheet.Cells["A1"].Value = "Организация";
                     worksheet.Cells["B1"].Value = "Телефон";
                     worksheet.Cells["C1"].Value = "ИНН";
