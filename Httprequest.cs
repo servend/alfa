@@ -105,15 +105,15 @@ namespace alfa
 
         public static async Task DaData(List<Organization> organizations)
         {
-            try
-            {
+            
                 Console.WriteLine("Начались запросы в dadata");
                 using HttpClient client = new HttpClient();
                 // Ваш токен API
                 string token = "a40fb39d08893335e13fdcb13466823ac1bfbd24";
                 foreach (Organization organization in organizations)
                 {
-
+                try
+                {
                     // Создаем объект запроса
                     var queryData = new
                     {
@@ -142,7 +142,7 @@ namespace alfa
                         {
                             organization.Name = (string)data["suggestions"][0]["data"]["fio"]["name"] + " " + (string)data["suggestions"][0]["data"]["fio"]["surname"] + " " + (string)data["suggestions"][0]["data"]["fio"]["patronymic"];
                         }
-                        if (data["suggestions"][0]["data"]["state"]["status"].ToString() == "LIQUIDATED") { organization.Dubl = "Да"; }
+                        if (data["suggestions"][0]["data"]["state"]["status"].ToString() != "ACTIVE") { organization.Dubl = "Да"; }
                 }
                     else
                     {
@@ -150,10 +150,10 @@ namespace alfa
                         Console.WriteLine(await response.Content.ReadAsStringAsync());
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка " + ex);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ошибка " + ex);
+                }
             }
             }
     }
