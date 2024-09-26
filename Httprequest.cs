@@ -155,7 +155,7 @@ namespace alfa
                     Console.WriteLine("Ошибка " + ex);
                 }
             }
-            }
+        }
     }
 }
 
