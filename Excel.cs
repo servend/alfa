@@ -38,16 +38,12 @@ namespace alfa
                         // Получаем значение номера телефона
                         string number = worksheet.Cells[row, 2].Value.ToString();
                         number = Regex.Replace(number, "[^0-9]", "");
-                        string name = worksheet.Cells[row, 3].Value.ToString();
-                        // Создаем объект Organization и добавляем его в список
-                        Organization organization = new Organization(inn, number," ",name);
+                        
+                        Organization organization = new Organization(inn, number," ", " ");
                         organizations.Add(organization);
                     }
                 }
-            }
-
-            // Выводим список организаций
-            
+            }   
         }
         public static void INN_folder_create()
         {
@@ -82,6 +78,7 @@ namespace alfa
         }
         public static void INN_file_addobj(List<Organization> organizations)
         {
+            Console.WriteLine("Идет выгрузка в эксель не выключайте приложение");
             string folderPath = @"C:\INN_Output\ИНН.xlsx";
             using (ExcelPackage excelPackage = new ExcelPackage(new FileInfo(folderPath)))
             {
@@ -94,7 +91,9 @@ namespace alfa
                     worksheet.Cells["C1"].Value = "ИНН";
                     FileInfo excelFile = new FileInfo(folderPath);
                     excelPackage.SaveAs(excelFile);
+                    
                 }
+                Console.WriteLine("Успешная выгрузка");
             }
         }
     }

@@ -5,6 +5,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Xml.Linq;
+//Ключи альфа - fb262dfb-8684-455f-881c-be6fa4590dff 
 
 namespace alfa
 {
@@ -15,11 +19,11 @@ namespace alfa
         {
             foreach (Organization organization in organizations)
             {
+                
                 try
                 {
                     // Создаем HTTP-клиент
                     using HttpClient client = new HttpClient();
-
                     // Устанавливаем заголовок "API-key"
                     client.DefaultRequestHeaders.Add("API-key", "fb262dfb-8684-455f-881c-be6fa4590dff");
 
@@ -98,6 +102,60 @@ namespace alfa
                 }
             }
         }
+
+        public static async Task DaData(List<Organization> organizations)
+        {
+            try
+            {
+                Console.WriteLine("Начались запросы в dadata");
+                using HttpClient client = new HttpClient();
+                // Ваш токен API
+                string token = "a40fb39d08893335e13fdcb13466823ac1bfbd24";
+                foreach (Organization organization in organizations)
+                {
+
+                    // Создаем объект запроса
+                    var queryData = new
+                    {
+                        query = "" + organization.INN.ToString() + @""
+                    };
+
+                    // Сериализуем объект в JSON
+                    var json = System.Text.Json.JsonSerializer.Serialize(queryData);
+
+                    // Настраиваем HttpClient
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
+
+                    // Отправляем запрос
+                    var response = await client.PostAsync("http://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party",
+                        new StringContent(json, Encoding.UTF8, "application/json"));
+
+                    // Проверяем успешность ответа
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseData = await response.Content.ReadAsStringAsync();
+                        JObject data = JObject.Parse(responseData);
+                        organization.Name = data["suggestions"][0]["data"]["management"]?["name"]?.ToString() ?? "Информация о руководителе отсутствует";
+                        if (organization.Name == "Информация о руководителе отсутствует")
+                        {
+                            organization.Name = (string)data["suggestions"][0]["data"]["fio"]["name"] + " " + (string)data["suggestions"][0]["data"]["fio"]["surname"] + " " + (string)data["suggestions"][0]["data"]["fio"]["patronymic"];
+                        }
+                        if (data["suggestions"][0]["data"]["state"]["status"].ToString() == "LIQUIDATED") { organization.Dubl = "Да"; }
+                }
+                    else
+                    {
+                        Console.WriteLine($"Ошибка: {response.StatusCode}");
+                        Console.WriteLine(await response.Content.ReadAsStringAsync());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ошибка " + ex);
+            }
+            }
     }
 }
 
