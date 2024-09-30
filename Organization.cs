@@ -1,11 +1,4 @@
-﻿using System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace alfa
+﻿namespace alfa
 {
     internal class Organization
     {

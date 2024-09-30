@@ -1,13 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Xml.Linq;
 //Ключи альфа - fb262dfb-8684-455f-881c-be6fa4590dff 
 
 namespace alfa
@@ -19,7 +14,7 @@ namespace alfa
         {
             foreach (Organization organization in organizations)
             {
-                
+
                 try
                 {
                     // Создаем HTTP-клиент
@@ -54,19 +49,19 @@ namespace alfa
                     {
                         Content = new StringContent(json, Encoding.UTF8, "application/json")
                     };
-                        // Отправляем HTTP-запрос и получаем ответ
-                        HttpResponseMessage response = await client.SendAsync(request);
-                        Console.WriteLine($"{request.Method} {request.RequestUri}");
-                        // Выводим заголовки запроса
-                        Console.WriteLine("Headers:");
-                        foreach (var header in request.Headers)
-                        {
-                            Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
-                        }
+                    // Отправляем HTTP-запрос и получаем ответ
+                    HttpResponseMessage response = await client.SendAsync(request);
+                    Console.WriteLine($"{request.Method} {request.RequestUri}");
+                    // Выводим заголовки запроса
+                    Console.WriteLine("Headers:");
+                    foreach (var header in request.Headers)
+                    {
+                        Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+                    }
 
-                        // Выводим содержимое тела запроса (JSON)
-                        Console.WriteLine("Body:");
-                        Console.WriteLine(json);
+                    // Выводим содержимое тела запроса (JSON)
+                    Console.WriteLine("Body:");
+                    Console.WriteLine(json);
                     if (response.IsSuccessStatusCode)
                     {
                         // Получаем содержимое ответа
@@ -105,13 +100,13 @@ namespace alfa
 
         public static async Task DaData(List<Organization> organizations)
         {
-            
-                Console.WriteLine("Начались запросы в dadata");
-                using HttpClient client = new HttpClient();
-                // Ваш токен API
-                string token = "a40fb39d08893335e13fdcb13466823ac1bfbd24";
-                foreach (Organization organization in organizations)
-                {
+
+            Console.WriteLine("Начались запросы в dadata");
+            using HttpClient client = new HttpClient();
+            // Ваш токен API
+            string token = "a40fb39d08893335e13fdcb13466823ac1bfbd24";
+            foreach (Organization organization in organizations)
+            {
                 try
                 {
                     // Создаем объект запроса
@@ -137,17 +132,46 @@ namespace alfa
                     {
                         var responseData = await response.Content.ReadAsStringAsync();
                         JObject data = JObject.Parse(responseData);
-                        organization.Name = data["suggestions"][0]["data"]["management"]?["name"]?.ToString() ?? "Информация о руководителе отсутствует";
+
+                        // Проверяем, является ли 'management' объектом
+                        if (data["suggestions"]?[0]?["data"]?["management"] is JObject management)
+                        {
+                            organization.Name = management["name"]?.ToString() ?? "Информация о руководителе отсутствует";
+                        }
+                        else
+                        {
+                            // Если 'management' не объект, ищем информацию в 'fio'
+                            if (data["suggestions"]?[0]?["data"]?["fio"] is JObject fio)
+                            {
+                                organization.Name = fio["surname"]?.ToString() ?? "";
+                                organization.Name += " " + fio["name"]?.ToString() ?? "";
+                                organization.Name += " " + fio["patronymic"]?.ToString() ?? "";
+
+                                // Проверяем состояние
+                                if (data["suggestions"]?[0]?["data"]?["state"] is JObject state)
+                                {
+                                    if (state["status"]?.ToString() != "ACTIVE")
+                                    {
+                                        organization.Dubl = "Да";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                organization.Name = "Информация о руководителе отсутствует";
+                            }
+                        }
                         if (organization.Name == "Информация о руководителе отсутствует")
                         {
-                            organization.Name = (string)data["suggestions"][0]["data"]["fio"]["name"] + " " + (string)data["suggestions"][0]["data"]["fio"]["surname"] + " " + (string)data["suggestions"][0]["data"]["fio"]["patronymic"];
+                            organization.Dubl = "Да";
+                            Console.WriteLine("Ошибка: Информация о руководителе отсутствует");
+                            // Добавьте логику обработки отсутствия информации о руководителе
                         }
-                        if (data["suggestions"][0]["data"]["state"]["status"].ToString() != "ACTIVE") { organization.Dubl = "Да"; }
-                }
-                    else
-                    {
-                        Console.WriteLine($"Ошибка: {response.StatusCode}");
-                        Console.WriteLine(await response.Content.ReadAsStringAsync());
+                        else
+                        {
+                            Console.WriteLine($"Ошибка: {response.StatusCode}");
+                            Console.WriteLine(await response.Content.ReadAsStringAsync());
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -155,7 +179,7 @@ namespace alfa
                     Console.WriteLine("Ошибка " + ex);
                 }
             }
-        }
+        } 
     }
 }
 

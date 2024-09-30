@@ -1,10 +1,4 @@
 ﻿using alfa;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 class Program
 {
@@ -38,7 +32,7 @@ class Program
     {
         foreach (Organization Filtredorganization in Filtredorganizations)
         {
-            if (Filtredorganization.Name != "" && Filtredorganization.Dubl != "Да") { newFiltredorganizations.Add(Filtredorganization); }
+            if ( Filtredorganization.Dubl != "Да" ) { newFiltredorganizations.Add(Filtredorganization); }
 
         }
     }
