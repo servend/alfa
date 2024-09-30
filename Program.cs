@@ -24,20 +24,7 @@ class Program
         Excel.INN_folder_create();
         Excel.INN_file_create();
         Excel.INN_file_addobj(newFiltredorganizations);
-
         }
-
-
-    public static void filtrorgName(List<Organization> Filtredorganizations, List<Organization> newFiltredorganizations)
-    {
-        foreach (Organization Filtredorganization in Filtredorganizations)
-        {
-            if ( Filtredorganization.Dubl != "Да" ) { newFiltredorganizations.Add(Filtredorganization); }
-
-        }
-    }
-
-
     public static void filtrorg(List<Organization> organizations, List<Organization> Filtredorganizations)
         {
             foreach (Organization organization in organizations)
