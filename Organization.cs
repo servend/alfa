@@ -12,7 +12,5 @@
             Dubl = dubl;
             Name = name;    
         }
-
-    }
-   
+    }  
 }

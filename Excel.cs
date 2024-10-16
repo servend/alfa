@@ -11,10 +11,6 @@ namespace alfa
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             // Путь к файлу Excel
             string filePath = "C:/Users/User/Desktop/Лиды/ноябрь/База.xlsx";
-
-            // Создаем список объектов Organization для хранения данных
-            
-
             // Открываем файл Excel
             using (ExcelPackage package = new ExcelPackage(new FileInfo(filePath)))
             {
@@ -24,8 +20,6 @@ namespace alfa
                 // Итерируемся по строкам, начиная со второй (первая - заголовки)
                 for (int row = 2; row <= worksheet.Dimension.Rows; row++)
                 {
-                    // Получаем значение ИНН
-
                     // Проверяем, есть ли во втором столбце значение
                     if (worksheet.Cells[row, 2].Value != null && worksheet.Cells[row, 1].Value != null)
                     {

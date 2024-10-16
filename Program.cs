@@ -1,5 +1,4 @@
 ﻿using alfa;
-
 class Program
 {
     static async Task Main()
@@ -26,12 +25,10 @@ class Program
         Excel.INN_file_addobj(newFiltredorganizations);
         }
     public static void filtrorg(List<Organization> organizations, List<Organization> Filtredorganizations)
+    {
+        foreach (Organization organization in organizations)
         {
-            foreach (Organization organization in organizations)
-            {
-                if (organization.Dubl != "Да") { Filtredorganizations.Add(organization); }
-
-            }
-        } 
-    
+        if (organization.Dubl != "Да") { Filtredorganizations.Add(organization); }
+        }
+    } 
 }
